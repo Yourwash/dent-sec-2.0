@@ -1,0 +1,25 @@
+<nav class="navbar navbar-expand-lg navbar-light text-light bg-info">
+  <div class="container-fluid">
+    <button class="btn btn-primary" data-bs-toggle="button" type="button" routerLink="/appointments">
+      Vlahoyiannis Dentistry
+    </button>
+    <button class="btn btn-primary me-3" data-bs-toggle="button" type="button" routerLink="/clients">
+      Clients
+    </button>
+    <button class="btn btn-primary me-3" data-bs-toggle="button" type="button" routerLink="/salesReps">
+      Sales Reps
+    </button>
+    <button class="btn btn-primary me-3" data-bs-toggle="button" type="button" routerLink="/">
+      Coworkers
+    </button>
+    <button class="btn btn-primary" data-bs-toggle="button" type="button" routerLink="/">
+      Inventory
+    </button>
+    <button type="button" class="btn btn-dark" appDarkMode>Dark</button>
+    <h5>{{date | date:'short'}}</h5>
+  </div>
+</nav>
+<div class="container">
+  <router-outlet></router-outlet>
+</div>
+

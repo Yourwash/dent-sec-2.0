@@ -1,0 +1,40 @@
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th scope="col">Client ID</th>
+    <th scope="col">First Name</th>
+    <th scope="col">Last Name</th>
+    <th scope="col">Date of birth</th>
+    <th scope="col">E-mail</th>
+    <th scope="col">Phone Number</th>
+  </tr>
+  </thead>
+  <tbody *ngFor="let client of clients let i=index;">
+  <tr>
+    <td [ngClass]="isVisible && index==i ? 'd-none': ''" (click)="show(i)">{{client.clientID}}</td>
+    <td [ngClass]="isVisible && index==i ? '': 'd-none'"><input [(ngModel)]="client.clientID"></td>
+    <td>{{client.name}}</td>
+    <td>{{client.lastName}}</td>
+    <td>{{client.dob}}</td>
+    <td>{{client.email}}</td>
+    <td>{{client.number}}</td>
+    <td>
+      <button class="btn btn-info">Update</button>
+    </td>
+  </tr>
+  <tr class="update-form">
+    <td><input [(ngModel)]="client.clientID"></td>
+    <td><input [(ngModel)]="client.name"></td>
+    <td><input [(ngModel)]="client.lastName"></td>
+    <td><input [(ngModel)]="client.dob"></td>
+    <td><input [(ngModel)]="client.email"></td>
+    <td><input [(ngModel)]="client.number"></td>
+    <td>
+      <button class="btn btn-info">Update</button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+<div class="col-sm">
+  <app-client-details *ngFor="let client of clients" [client]="client"></app-client-details>
+</div>

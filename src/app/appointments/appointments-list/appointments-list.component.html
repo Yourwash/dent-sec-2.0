@@ -1,0 +1,45 @@
+<div class="row my-3">
+<app-appointments-form></app-appointments-form>
+</div>
+<div class="row my-3">
+<table class="table table-striped my-3">
+  <thead>
+  <tr>
+    <th scope="col">Appointment ID</th>
+    <th scope="col">Last Name</th>
+    <th scope="col">First Name</th>
+    <th scope="col">Procedure</th>
+    <th scope="col">Date</th>
+    <th scope="col">Time</th>
+    <th scope="col">Doctor</th>
+  </tr>
+  </thead>
+  <tbody *ngFor="let appointment of appointments let i=index;">
+  <tr>
+    <td>{{appointment.appointmentID}}</td>
+    <td>{{appointment.clientLastName}}</td>
+    <td>{{appointment.clientName}}</td>
+    <td>{{appointment.procedure}}</td>
+    <td>{{appointment.date}}</td>
+    <td>{{appointment.time}}</td>
+    <td>{{appointment.doctors}}</td>
+    <td>{{appointment.helpers}}</td>
+
+    <td>
+      <button class="btn btn-info">Update</button>
+    </td>
+  </tr>
+<!--  <tr class="update-form">-->
+<!--    <td><input [(ngModel)]="appointment.clientID"></td>-->
+<!--    <td><input [(ngModel)]="appointment.name"></td>-->
+<!--    <td><input [(ngModel)]="appointment.lastName"></td>-->
+<!--    <td><input [(ngModel)]="appointment.dob"></td>-->
+<!--    <td><input [(ngModel)]="appointment.email"></td>-->
+<!--    <td><input [(ngModel)]="appointment.number"></td>-->
+<!--    <td>-->
+<!--      <button class="btn btn-info">Update</button>-->
+<!--    </td>-->
+<!--  </tr>-->
+  </tbody>
+</table>
+</div>
