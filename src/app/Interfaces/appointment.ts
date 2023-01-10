@@ -1,7 +1,9 @@
 interface Doctor {
+  fullName:string;
 }
 
 interface Helper {
+  fullName:string;
 }
 
 export interface Appointment {

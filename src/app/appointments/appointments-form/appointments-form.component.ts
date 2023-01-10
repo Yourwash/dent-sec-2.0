@@ -1,6 +1,7 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormControl} from "@angular/forms";
 import {Client} from "../../Interfaces/client";
+import {Appointment} from "../../Interfaces/appointment";
 
 interface Dentist {
   staffID: number;
@@ -91,25 +92,38 @@ export class AppointmentsFormComponent implements OnInit {
   ]
   procedure: Procedure;
   addForm = this.fb.group({
-    clientName: new FormControl(''),
-    clientLastName: new FormControl(''),
-    procedure: new FormControl(''),
+    clientName: [''],
+    clientLastName: [''],
+    procedure: [''],
     dentists: this.fb.array(
-      []
+      [
+        this.fb.control({})
+      ]
     ), helpers: this.fb.array(
-      []
+      [
+        this.fb.control({})
+      ]
     ),
-    date: new FormControl(''),
-    time: new FormControl(''),
-    doctor: new FormControl(''),
-
+    date: [''],
+    time: [''],
   });
 
-
+  setFormControls() {
+    console.log(1)
+    this.dentists.clear()
+    this.helpers.clear()
+    for(let i =0; i<this.procedure.helpers; i++){
+      this.addDentists();
+    }
+    for(let i =0; i<this.procedure.dentists; i++){
+      this.addHelpers();
+    }
+    console.log(this.helpers.controls)
+  }
+// appointment : Appointment;
   get dentists() {
     return this.addForm.get('dentists') as FormArray;
   }
-
   addDentists() {
     this.dentists.push(this.fb.control(''))
   }
@@ -130,5 +144,9 @@ export class AppointmentsFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  onSubmit() {
+    console.log(this.addForm.value);
   }
 }

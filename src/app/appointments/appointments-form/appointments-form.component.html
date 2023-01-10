@@ -1,55 +1,58 @@
-<div class="container-fluid my-3 dropdown">
-  <div class="row">
-    <div class="input-group mb-3 col">
-      <span class="input-group-text">Client's Last Name:</span>
-      <input class="form-control" list="client-last-names-datalistOptions" id="client-last-names"
-             placeholder="Type to search...">
-      <datalist id="client-last-names-datalistOptions">
-        <option *ngFor="let client of clients;" value="{{client.lastName}}">
-      </datalist>
-    </div>
-    <div class="input-group mb-3 col">
-      <span class="input-group-text" id="basic-addon2">Client's First Name:</span>
-      <input class="form-control" list="client-names-datalistOptions" id="client-names" placeholder="Type to search...">
-      <datalist id="client-names-datalistOptions">
-        <option *ngFor="let client of clients;" value="{{client.name}}">
-      </datalist>
-    </div>
-    <div class="input-group mb-3 col dropdown">
-      <span class="input-group-text">Procedure:</span>
-      <select class="form-select" aria-label="Default select example" [(ngModel)]="procedure">
-        <option *ngFor="let procedure of procedures;" [ngValue]="procedure">{{procedure.name}}</option>
-      </select>
-    </div>
-  </div>
-  <div class="row">
-    <div class="input-group mb-3 col">
-      <span class="input-group-text" id="basic-addon1">Date:</span>
-      <input type="date" class="form-control" placeholder="{{currentDate}}" aria-label="Date"
-             aria-describedby="basic-addon1">
-    </div>
-    <div class="input-group mb-3 col">
-      <span class="input-group-text">Time:</span>
-      <input type="time" class="form-control" placeholder="" aria-label="Date"
-             aria-describedby="basic-addon1">
-    </div>
-  </div>
+<form [formGroup]="addForm" (ngSubmit)="onSubmit()">
+  <div class="container-fluid my-3 dropdown">
     <div class="row">
-      <div *ngFor="let item of [].constructor(procedure.dentists)" class="input-group mb-3 col">
+      <div class="input-group mb-3 col">
+        <span class="input-group-text">Client's Last Name:</span>
+        <input formControlName="clientLastName" class="form-control" list="client-last-names-datalistOptions" id="client-last-names"
+               placeholder="Type to search...">
+        <datalist id="client-last-names-datalistOptions">
+          <option *ngFor="let client of clients;" value="{{client.lastName}}">
+        </datalist>
+      </div>
+      <div class="input-group mb-3 col">
+        <span class="input-group-text" id="basic-addon2">Client's First Name:</span>
+        <input formControlName="clientName" class="form-control" list="client-names-datalistOptions" id="client-names"
+               placeholder="Type to search...">
+        <datalist id="client-names-datalistOptions">
+          <option *ngFor="let client of clients;" value="{{client.name}}">
+        </datalist>
+      </div>
+      <div class="input-group mb-3 col dropdown">
+        <span class="input-group-text">Procedure:</span>
+        <select formControlName="procedure" class="form-select" aria-label="Default select example" [(ngModel)]="procedure" (click)="setFormControls()" >
+          <option *ngFor="let procedure of procedures;" [ngValue]="procedure">{{procedure.name}}"</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-group mb-3 col">
+        <span class="input-group-text" id="basic-addon1">Date:</span>
+        <input formControlName="date"type="date" class="form-control" placeholder="{{currentDate}}" aria-label="Date"
+               aria-describedby="basic-addon1">
+      </div>
+      <div class="input-group mb-3 col">
+        <span class="input-group-text">Time:</span>
+        <input formControlName="time" type="time" class="form-control" placeholder="" aria-label="Date"
+               aria-describedby="basic-addon1">
+      </div>
+    </div>
+    <div class="row" formArrayName="dentists">
+      <div *ngFor="let dentists of dentists.controls let i=index" class="input-group mb-3 col">
         <span class="input-group-text">Dentist:</span>
-        <select class="form-select" aria-label="Default select example">
-          <option *ngFor="let dentist of dentists1;">{{dentist.lastName}} {{dentist.name}}</option>
+        <select class="form-select" aria-label="Default select example" [formControlName]="i">
+          <option *ngFor="let dentist of dentists1;" id="dentist-{{i}}">{{dentist.lastName}} {{dentist.name}}</option>
         </select>
       </div>
     </div>
-    <div class="row">
-      <div *ngFor="let helper of let item of [].constructor(procedure.helpers)" class="input-group mb-3 col">
+    <div class="row" formArrayName="helpers">
+      <div *ngFor="let helpers of helpers.controls let i=index" class="input-group mb-3 col">
         <span class="input-group-text">Helper:</span>
-        <select class="form-select" aria-label="Default select example" type="text">
-          <option *ngFor="let helper of helpers1;">{{helper.lastName}} {{helper.name}}</option>
+        <select class="form-select" aria-label="Default select example" [formControlName]="i">
+          <option *ngFor="let helper of helpers1;" id="helper-{{i}}">{{helper.lastName}} {{helper.name}}</option>
         </select>
       </div>
     </div>
-  <button class="btn btn-primary float-end" type="submit">Submit</button>
-</div>
+    <button class="btn btn-primary float-end" type="submit">Submit</button>
+  </div>
+</form>
 {{procedure.name}}
