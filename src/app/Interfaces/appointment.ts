@@ -1,20 +1,21 @@
-interface Doctor {
-  fullName:string;
-}
+import {Procedure} from "./procedure";
 
-interface Helper {
-  fullName:string;
-}
+// interface Doctor {
+//   fullName:string;
+// }
+//
+// interface Helper {
+//   fullName:string;
+// }
 
 export interface Appointment {
-  appointmentID:number;
-  clientName: string;
-  clientLastName: string;
-  procedure: string;
-  date: string;
-  time: string;
-  doctors: Doctor[];
-  helpers: Helper[];
+  clientName: string|null;
+  clientLastName: string|null;
+  procedure: Procedure| any;
+  date: string|null;
+  time: string|null;
+  dentists: any;
+  helpers: any;
 
 
 }

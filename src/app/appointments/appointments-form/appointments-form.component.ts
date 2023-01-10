@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl} from "@angular/forms";
+import {FormArray, FormBuilder} from "@angular/forms";
 import {Client} from "../../Interfaces/client";
 import {Appointment} from "../../Interfaces/appointment";
 
@@ -146,7 +146,10 @@ export class AppointmentsFormComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  appointments:Appointment[] = [];
   onSubmit() {
     console.log(this.addForm.value);
+    this.appointments.push(this.addForm.getRawValue());
+    console.log(this.appointments);
   }
 }
