@@ -1,4 +1,4 @@
-export interface Coworker {
+export interface StaffMember {
   staffID: number;
   name: string;
   lastName: string;

@@ -4,7 +4,7 @@ interface Dentist {
 interface Helper {
 }
 
-export interface Procedure {
+export interface Operation {
   dentists: Dentist[];
   helpers: Helper[];
 }

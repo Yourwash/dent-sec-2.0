@@ -11,30 +11,30 @@
   </thead>
   <tbody *ngFor="let client of clients let i=index;">
   <tr>
-    <td [ngClass]="isVisible && index==i ? 'd-none': ''" (click)="show(i)">{{client.clientID}}</td>
-    <td [ngClass]="isVisible && index==i ? '': 'd-none'"><input [(ngModel)]="client.clientID"></td>
+    <td [ngClass]="isVisible && index==i ? 'd-none': ''" (click)="show(i)">{{client.id}}</td>
+    <td [ngClass]="isVisible && index==i ? '': 'd-none'"><input [(ngModel)]="client.id"></td>
     <td>{{client.name}}</td>
     <td>{{client.lastName}}</td>
     <td>{{client.dob}}</td>
     <td>{{client.email}}</td>
-    <td>{{client.number}}</td>
+    <td>{{client.phoneNumber}}</td>
     <td>
-      <button class="btn btn-info">Update</button>
+<!--      <button class="btn btn-danger" (click)="deleteClient(client)">Delete</button>-->
     </td>
   </tr>
   <tr class="update-form">
-    <td><input [(ngModel)]="client.clientID"></td>
+    <td><input [(ngModel)]="client.id"></td>
     <td><input [(ngModel)]="client.name"></td>
     <td><input [(ngModel)]="client.lastName"></td>
     <td><input [(ngModel)]="client.dob"></td>
     <td><input [(ngModel)]="client.email"></td>
-    <td><input [(ngModel)]="client.number"></td>
+    <td><input [(ngModel)]="client.phoneNumber"></td>
     <td>
-      <button class="btn btn-info">Update</button>
+      <button class="btn btn-info" (click)="updateClient(client)">Update</button>
     </td>
   </tr>
   </tbody>
 </table>
-<div class="col-sm">
-  <app-client-details *ngFor="let client of clients" [client]="client"></app-client-details>
-</div>
+<!--<div class="col-sm">-->
+<!--  <app-client-details *ngFor="let client of clients" [client]="client"></app-client-details>-->
+<!--</div>-->

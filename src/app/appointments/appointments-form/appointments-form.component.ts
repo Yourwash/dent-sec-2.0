@@ -1,25 +1,27 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder} from "@angular/forms";
-import {Client} from "../../Interfaces/client";
-import {Appointment} from "../../Interfaces/appointment";
+import {FormArray, FormBuilder, FormControl} from "@angular/forms";
+import {Appointment} from "../../Models/appointment";
+import {AppointmentService} from "../appointment.service";
+import {ClientView} from "../../Models/client-view";
+import {HttpClient} from "@angular/common/http";
+import {OperationForForm} from "../../Models/operation-for-form";
+import {StaffMemberForForm} from "../../Models/staff-member-for-form";
+import {AppointmentToCreate} from "../../Models/appointment-to-create";
 
 interface Dentist {
-  staffID: number;
+  id: number;
   name: string;
   lastName: string
+  roleId: number;
 }
 
 interface Helper {
-  staffID: number;
+  id: number;
   name: string;
   lastName: string
+  roleId: number;
 }
 
-interface Procedure {
-  name: string;
-  dentists: number;
-  helpers: number;
-}
 
 @Component({
   selector: 'app-appointments-form',
@@ -28,128 +30,122 @@ interface Procedure {
 })
 export class AppointmentsFormComponent implements OnInit {
 
-  procedures: Procedure[] = [
-    {
-      name: 'Aponebrosi',
-      dentists: 2,
-      helpers: 1
-    },
-    {
-      name: 'Aponebrosi2',
-      dentists: 1,
-      helpers: 2
-    }]
-  clients: Client[] = [
-    {clientID: 2, name: 'asdasd', lastName: "Asdasd", email: "Asdasda", number: "asdasd", dob: "asdasd"},
-    {
-      clientID: 1,
-      name: "Cecelia",
-      lastName: "Lyddon",
-      email: "clyddon0@cbc.ca",
-      number: "310-997-2204",
-      dob: "1/26/1982"
-    },
-    {
-      clientID: 2,
-      name: "Edmon",
-      lastName: "Conwell",
-      email: "econwell1@wix.com",
-      number: "811-374-8252",
-      dob: "8/28/1989"
-    },
-    {
-      clientID: 3,
-      name: "Bent",
-      lastName: "Wrate",
-      email: "bwrate2@google.de",
-      number: "735-301-6841",
-      dob: "11/1/1992"
-    },
-    {
-      clientID: 4,
-      name: "Laetitia",
-      lastName: "Tregust",
-      email: "ltregust3@hao123.com",
-      number: "438-168-2890",
-      dob: "1/26/1996"
-    },
-    {
-      clientID: 5,
-      name: "Pavla",
-      lastName: "Birth",
-      email: "pbirth4@goo.ne.jp",
-      number: "918-187-8750",
-      dob: "12/2/1982"
-    }
-  ]
-  dentists1: Dentist[] = [
-    {staffID: 1, name: 'Stratos', lastName: 'Dionisiou'},
-    {staffID: 3, name: 'Makis', lastName: 'Dimakis'}
-  ]
-  helpers1: Helper[] = [
-    {staffID: 2, name: 'Tina', lastName: 'turner'},
-    {staffID: 4, name: 'Billy', lastName: 'Joel'}
-  ]
-  procedure: Procedure;
+  constructor(private fb: FormBuilder, private appointmentService: AppointmentService, private http: HttpClient) {
+    this.currentDate = new Date();
+  }
+
+  clients: ClientView[] = [];
+  operations: OperationForForm[] = []
+  staff: StaffMemberForForm[] = [];
+  dentists1: Dentist[] = [];
+  helpers1: Helper[] = []
+  operation: OperationForForm = {id: 1, name: "Katharismos", dentists: 1, helpers: 0};
+  currentDate: Date;
+  appointmentToSubmit: AppointmentToCreate = {
+    date: '',
+    time: '',
+    operationId: '',
+    clientId: '',
+    dentistIdList: [],
+    helperIdList: []
+  }
+
   addForm = this.fb.group({
-    clientName: [''],
-    clientLastName: [''],
-    procedure: [''],
-    dentists: this.fb.array(
-      [
-        this.fb.control({})
-      ]
-    ), helpers: this.fb.array(
-      [
-        this.fb.control({})
-      ]
-    ),
-    date: [''],
-    time: [''],
-  });
+      date: [],
+      time: [],
+      clientId: [],
+      operationId: [this.operation.id],
+      dentistIdList: this.fb.array(
+        [
+          this.fb.control({})
+        ]),
+      helperIdList: this.fb.array(
+        [
+          this.fb.control({}
+          )
+        ]
+      )
+    }
+  );
+
+  setStaff() {
+    this.dentists1 = [];
+    this.helpers1 = [];
+    this.staff.forEach((staffMember) => {
+        if (staffMember.roleId === 5) {
+          this.dentists1.push(staffMember);
+        } else {
+          this.helpers1.push(staffMember);
+        }
+      }
+    )
+  }
 
   setFormControls() {
-    console.log(1)
-    this.dentists.clear()
-    this.helpers.clear()
-    for(let i =0; i<this.procedure.helpers; i++){
-      this.addDentists();
+    this.dentistIdList.clear()
+    this.helperIdList.clear()
+    for (let i = 0; i < this.operation.dentists; i++) {
+      this.addDentistId();
     }
-    for(let i =0; i<this.procedure.dentists; i++){
-      this.addHelpers();
+    for (let i = 0; i < this.operation.helpers; i++) {
+      this.addHelperId();
     }
-    console.log(this.helpers.controls)
-  }
-// appointment : Appointment;
-  get dentists() {
-    return this.addForm.get('dentists') as FormArray;
-  }
-  addDentists() {
-    this.dentists.push(this.fb.control(''))
+    this.setStaff();
   }
 
-  get helpers() {
-    return this.addForm.get('helpers') as FormArray;
+  addDentistId() {
+    this.dentistIdList.push(this.fb.control(''))
   }
 
-  addHelpers() {
-    this.helpers.push(this.fb.control(''))
+  addHelperId() {
+    this.helperIdList.push(this.fb.control(''))
   }
 
-  currentDate: Date;
-
-  constructor(private fb: FormBuilder) {
-    this.currentDate = new Date();
-    this.procedure = {name: 'Katharismos', dentists: 1, helpers: 0}
+  get dentistIdList() {
+    return this.addForm.get('dentistIdList') as FormArray;
   }
 
-  ngOnInit(): void {
+  get helperIdList() {
+    return this.addForm.get('helperIdList') as FormArray;
   }
 
-  appointments:Appointment[] = [];
+  ngOnInit()
+    :
+    void {
+    this.appointmentService.fetchClients().subscribe(res => res.forEach(value => {
+          this.clients.push(value)
+        }
+      )
+    );
+    this.appointmentService.fetchOperations().subscribe(res => res.forEach(value => {
+          this.operations.push(value)
+        }
+      )
+    );
+    this.appointmentService.fetchStaff().subscribe(staff => staff.forEach(staffMember => {
+          this.staff.push(staffMember)
+        }
+      )
+    );
+  }
+
   onSubmit() {
-    console.log(this.addForm.value);
-    this.appointments.push(this.addForm.getRawValue());
-    console.log(this.appointments);
+    this.formToAppointmentConverter()
+    this.appointmentService.createAppointment(this.appointmentToSubmit);
+  }
+
+  formToAppointmentConverter() {
+    console.log(this.addForm.value.time);
+    this.appointmentToSubmit.clientId = this.addForm.value.clientId;
+    this.appointmentToSubmit.date = this.addForm.value.date;
+    this.appointmentToSubmit.time = this.addForm.value.time;
+    let i = 0
+    for (let control of this.dentistIdList.controls) {
+      this.appointmentToSubmit.dentistIdList?.push(control.value)
+    }
+    for (let control of this.helperIdList.controls) {
+      this.appointmentToSubmit.helperIdList?.push(control.value)
+    }
+    this.appointmentToSubmit.operationId = this.addForm.value.operationId;
   }
 }
