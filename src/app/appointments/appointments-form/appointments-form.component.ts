@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl} from "@angular/forms";
-import {Appointment} from "../../Models/appointment";
+import {Component, OnInit, Output} from '@angular/core';
+import {FormArray, FormBuilder} from "@angular/forms";
 import {AppointmentService} from "../appointment.service";
 import {ClientView} from "../../Models/client-view";
 import {HttpClient} from "@angular/common/http";
 import {OperationForForm} from "../../Models/operation-for-form";
 import {StaffMemberForForm} from "../../Models/staff-member-for-form";
 import {AppointmentToCreate} from "../../Models/appointment-to-create";
+import {Observable} from "rxjs";
 
 interface Dentist {
   id: number;
@@ -34,18 +34,31 @@ export class AppointmentsFormComponent implements OnInit {
     this.currentDate = new Date();
   }
 
+  @Output() clientObservable = new Observable<ClientView>((observer) => {
+      observer.next(this.client);
+    }
+  )
   clients: ClientView[] = [];
   operations: OperationForForm[] = []
   staff: StaffMemberForForm[] = [];
   dentists1: Dentist[] = [];
   helpers1: Helper[] = []
   operation: OperationForForm = {id: 1, name: "Katharismos", dentists: 1, helpers: 0};
+  client: ClientView = {
+    id: 1,
+    name: "Makis",
+    lastName: "Jameson",
+    dob: null,
+    phoneNumber: '6975102282',
+    email: "",
+    createTime: null
+  }
   currentDate: Date;
   appointmentToSubmit: AppointmentToCreate = {
     date: '',
     time: '',
-    operationId: '',
-    clientId: '',
+    operationId: 0,
+    clientId: 0,
     dentistIdList: [],
     helperIdList: []
   }
@@ -53,7 +66,7 @@ export class AppointmentsFormComponent implements OnInit {
   addForm = this.fb.group({
       date: [],
       time: [],
-      clientId: [],
+      clientId: [this.client.id],
       operationId: [this.operation.id],
       dentistIdList: this.fb.array(
         [
@@ -130,22 +143,22 @@ export class AppointmentsFormComponent implements OnInit {
   }
 
   onSubmit() {
-    this.formToAppointmentConverter()
+    this.formToAppointmentConverter();
+    console.log(this.appointmentToSubmit);
     this.appointmentService.createAppointment(this.appointmentToSubmit);
   }
 
   formToAppointmentConverter() {
-    console.log(this.addForm.value.time);
-    this.appointmentToSubmit.clientId = this.addForm.value.clientId;
+    this.appointmentToSubmit.clientId = this.client.id;
     this.appointmentToSubmit.date = this.addForm.value.date;
     this.appointmentToSubmit.time = this.addForm.value.time;
     let i = 0
     for (let control of this.dentistIdList.controls) {
-      this.appointmentToSubmit.dentistIdList?.push(control.value)
+      this.appointmentToSubmit.dentistIdList?.push(control.value);
     }
     for (let control of this.helperIdList.controls) {
-      this.appointmentToSubmit.helperIdList?.push(control.value)
+      this.appointmentToSubmit.helperIdList?.push(control.value);
     }
-    this.appointmentToSubmit.operationId = this.addForm.value.operationId;
+    this.appointmentToSubmit.operationId = this.operation.id;
   }
 }

@@ -1,8 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 
 import {HttpClient} from "@angular/common/http";
 import {AppointmentService} from "../appointment.service";
-import {AppointmentView} from "../../Models/appointment-view";
+import {AppointmentDto} from "../../Models/appointment-dto";
+import {Appointments} from "../../Models/appointments";
+import {Observable} from "rxjs";
 
 
 @Component({
@@ -10,28 +12,32 @@ import {AppointmentView} from "../../Models/appointment-view";
   templateUrl: './appointments-list.component.html',
   styleUrls: ['./appointments-list.component.css']
 })
-export class AppointmentsListComponent implements OnInit{
+export class AppointmentsListComponent implements OnInit {
 
-  constructor(private appointmentService: AppointmentService, private http: HttpClient) {}
+  constructor(private appointmentService: AppointmentService, private http: HttpClient) {
+  }
 
-  appointments: AppointmentView[] = [];
+  appointments: Appointments = {appointmentDtoList: []};
   page: number = 0;
 
+  showClient(){
+    this
+  }
+
   ngOnInit() {
-    this.appointmentService.fetchAppointments(this.page).subscribe(res => res.forEach(value => {
-          this.appointments.push(value)
-        }
-      )
+    this.appointmentService.fetchAppointments(this.page).subscribe(res => {
+        this.appointments = res;
+      }
     );
   }
 
   goDownOnePage() {
     if (this.page < 5) {
       this.page = this.page + 1;
-      this.appointmentService.fetchAppointments(this.page).subscribe(res => res.forEach(value => {
-            this.appointments.push(value);
-          }
-        )
+      this.appointments.appointmentDtoList = [];
+      this.appointmentService.fetchAppointments(this.page).subscribe(res => {
+          this.appointments = res;
+        }
       );
     }
   }
@@ -39,13 +45,12 @@ export class AppointmentsListComponent implements OnInit{
   goUpOnePage() {
     if (this.page > 0) {
       this.page = this.page - 1;
-      this.appointmentService.fetchAppointments(this.page).subscribe(res => res.forEach(value => {
-            this.appointments.push(value);
-          }
-        )
+      this.appointments.appointmentDtoList = [];
+      this.appointmentService.fetchAppointments(this.page).subscribe(res => {
+          this.appointments = res;
+        }
       );
     }
-
-
   }
+
 }

@@ -1,6 +1,6 @@
 import {Time} from "@angular/common";
 
-export interface AppointmentView {
+export interface AppointmentDto {
   appointmentId: number | null;
   client: string | null;
   createTime: Date |null

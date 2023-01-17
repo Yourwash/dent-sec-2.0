@@ -8,10 +8,11 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 
 @NgModule({
-  declarations: [
-    AppointmentsFormComponent,
-    AppointmentsListComponent
-  ],
+    declarations: [
+        AppointmentsFormComponent,
+        AppointmentsListComponent
+    ],
+    exports: [],
     imports: [
         CommonModule,
         AppointmentsRoutingModule,

@@ -1,11 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {AppointmentView} from "../Models/appointment-view";
+import {AppointmentDto} from "../Models/appointment-dto";
 import {ClientView} from "../Models/client-view";
 import {StaffMemberForForm} from "../Models/staff-member-for-form";
 import {OperationForForm} from "../Models/operation-for-form";
 import {AppointmentToCreate} from "../Models/appointment-to-create";
-import {catchError, throwError} from "rxjs";
+import {catchError, Observable, throwError} from "rxjs";
+import {Appointments} from "../Models/appointments";
 
 @Injectable({
   providedIn: 'root'
@@ -15,18 +16,30 @@ export class AppointmentService {
   constructor(private http: HttpClient) {
   }
 
+  testObservable = new Observable<string>((v)=>{
+    let appointments : AppointmentDto;
+  });
+
+  getTestObservable() {
+    return this.testObservable
+  }
+
+  setTestObservable(str: string) {
+    this.testObservable
+  }
+
   createAppointment(appointment: AppointmentToCreate) {
     this.http.post<AppointmentToCreate>('http://localhost:8080/appointments/create',
       appointment).pipe(
       catchError(this.handleError)).subscribe();
   }
 
-  fetchAppointments(page:number) {
-    return this.http.get<AppointmentView[]>('http://localhost:8080/appointments/all-pageable/'+page);
+  fetchAppointments(page: number) {
+    return this.http.get<Appointments>('http://localhost:8080/appointments/all-pageable/' + page);
   }
 
   fetchClients() {
-    return  this.http.get<ClientView[]>('http://localhost:8080/clients/dto/all').pipe(
+    return this.http.get<ClientView[]>('http://localhost:8080/clients/dto/all').pipe(
       catchError(this.handleError));
   }
 

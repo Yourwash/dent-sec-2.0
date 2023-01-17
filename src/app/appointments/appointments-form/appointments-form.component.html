@@ -5,7 +5,7 @@
         <span class="input-group-text">Client's Last Name:</span>
         <select formControlName="clientId" class="form-control" list="client-last-names-datalistOptions"
                 id="client-last-names"
-                placeholder="Type to search...">
+                placeholder="Type to search..." [(ngModel)]="client">
 
           <option *ngFor="let client of clients;" [ngValue]="client">{{client.lastName}} {{client.name}}</option>
         </select>
@@ -27,8 +27,8 @@
       </div>
       <div class="input-group mb-3 col">
         <span class="input-group-text">Time:</span>
-        <input formControlName="time" type="time" class="form-control" placeholder="" aria-label="Date"
-               aria-describedby="basic-addon1" ngModel="datetime.time">
+        <input formControlName="time" type="time" class="form-control" placeholder="HH:mm:ss" value="HH:mm:ss" aria-label="Date"
+               aria-describedby="basic-addon1">
       </div>
     </div>
     <div class="row" formArrayName="dentistIdList">

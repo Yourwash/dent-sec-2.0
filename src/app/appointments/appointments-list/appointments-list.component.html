@@ -13,7 +13,7 @@
       <th scope="col">Staff</th>
     </tr>
     </thead>
-    <tbody *ngFor="let appointment of appointments let i=index;">
+    <tbody *ngFor="let appointment of appointments.appointmentDtoList let i=index;">
     <tr>
       <td>{{appointment.appointmentId}}</td>
       <td>{{appointment.client}}</td>

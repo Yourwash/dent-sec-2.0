@@ -9,6 +9,7 @@ import {ShowDirective} from './Directives/show.directive';
 import {HideDirective} from './Directives/hide.directive';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClientModule} from "@angular/common/http";
+import {AppointmentsModule} from "./appointments/appointments.module";
 
 
 @NgModule({
@@ -25,7 +26,7 @@ import {HttpClientModule} from "@angular/common/http";
     FormsModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule
 
   ],
   providers: [],
